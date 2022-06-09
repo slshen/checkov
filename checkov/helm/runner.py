@@ -153,9 +153,6 @@ class Runner(BaseRunner):
 
                 last_line_dashes = False
             else:
-                if s.startswith('# Source: '):
-                    raise Exception(f'Line {line_num}: Unexpected line starting with # Source: {s}')
-
                 if not cur_writer:
                     continue
                 else:
@@ -172,6 +169,8 @@ class Runner(BaseRunner):
             lambda cd: (cd, self.parse_helm_chart_details(cd)), chart_directories))
         self.target_folder_path = tempfile.mkdtemp()
         processed_chart_dir_and_meta = []
+        if root_folder is None:
+            root_folder = ""
         for chart_dir, chart_meta in chart_dir_and_meta:
             processed_chart_dir_and_meta.append((chart_dir.replace(root_folder, ""), chart_meta))
             target_dir = chart_dir.replace(root_folder, f'{self.target_folder_path}/')
